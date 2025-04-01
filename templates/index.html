@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Price Prediction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script>
+        function updateDestinationOptions() {
+            var sourceCity = document.getElementById("source_city").value;
+            var destinationSelect = document.getElementById("destination_city");
+            var options = destinationSelect.getElementsByTagName("option");
+
+            for (var i = 0; i < options.length; i++) {
+                options[i].disabled = options[i].value === sourceCity;
+            }
+        }
+
+        function updateSourceOptions() {
+            var destinationCity = document.getElementById("destination_city").value;
+            var sourceSelect = document.getElementById("source_city");
+            var options = sourceSelect.getElementsByTagName("option");
+
+            for (var i = 0; i < options.length; i++) {
+                options[i].disabled = options[i].value === destinationCity;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Enter Flight Details</h2>
+        <form method="POST">
+            {% for feature, options in categories.items() %}
+            <div class="mb-3">
+                <label class="form-label">{{ feature }}</label>
+                <select class="form-control" name="{{ feature }}" required>
+                    <option selected disabled value="">Select {{ feature }}</option>
+                    {% for option in options %}
+                    <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+
+            <div class="mb-3">
+                <label class="form-label">Duration</label>
+                <input type="number" step="any" class="form-control" name="duration" min="1" max="20" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Days_left</label>
+                <input type="number" step="any" class="form-control" name="days_left" min="1" max="45" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Predict</button>
+        </form>
+
+        {% if prediction is not none %}
+            <div class="mt-4">
+                <h3>Predicted Flight Price: ₹{{ prediction }}</h3>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
