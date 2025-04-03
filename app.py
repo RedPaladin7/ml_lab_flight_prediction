@@ -28,18 +28,14 @@ def index():
     prediction = None
 
     if request.method == "POST":
-        # Extract categorical and numerical values
         input_data = {feature: request.form[feature] for feature in categories.keys()}
         input_data["duration"] = float(request.form["duration"])
         input_data["days_left"] = float(request.form["days_left"])
 
-        # Convert to DataFrame
         df = pd.DataFrame([input_data])
 
-        # Preprocess data
         df_processed = preprocessor.transform(df)
 
-        # Predict
         prediction = model.predict(df_processed)[0]
         prediction = round(prediction, 2)
 
